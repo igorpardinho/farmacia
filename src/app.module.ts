@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoriaModule } from './modules/categoria/categoria.module';
 import { Categoria } from './modules/categoria/entity/categoria';
@@ -9,19 +7,33 @@ import { ProdutoModule } from './modules/produto/produto.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      username: 'root',
-      password: 'root',
-      database: 'db_farmacia',
-      synchronize: true,
-      entities: [Categoria, Produto],
+    TypeOrmModule.forRootAsync({
+      useFactory: () => {
+        if (process.env.NODE_ENV === 'test') {
+          return {
+            type: 'sqlite',
+            database: ':memory:',
+            dropSchema: true,
+            synchronize: true,
+            entities: [Categoria, Produto],
+          };
+        }
+        return {
+          type: 'mysql',
+          host: 'localhost',
+          port: 3306,
+          username: 'root',
+          password: 'root',
+          database: 'db_farmacia',
+          synchronize: true,
+          entities: [Categoria, Produto],
+        };
+      },
     }),
     CategoriaModule,
     ProdutoModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
