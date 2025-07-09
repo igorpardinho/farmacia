@@ -14,7 +14,7 @@ import { CategoriaService } from '../service/categoria.service';
 import { CategoriaResponseDto } from '../dto/categoria.response.dto';
 import { CategoriaRequestDto } from '../dto/categoria.request.dto';
 
-@Controller('categorias')
+@Controller('/categorias')
 export class CategoriaController {
   constructor(private readonly categoriaService: CategoriaService) {}
 
@@ -41,12 +41,12 @@ export class CategoriaController {
   @HttpCode(HttpStatus.OK)
   update(
     @Param('id', ParseIntPipe) id: number,
-    dto: CategoriaRequestDto,
+    @Body() dto: CategoriaRequestDto,
   ): Promise<CategoriaResponseDto> {
     return this.categoriaService.update(id, dto);
   }
 
-  @Get(':nome')
+  @Get('/nome/:nome')
   findCategoryByName(
     @Param('nome') nome: string,
   ): Promise<CategoriaResponseDto[]> {

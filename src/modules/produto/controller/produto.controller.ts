@@ -14,7 +14,7 @@ import { ProdutoService } from '../service/produto.service';
 import { ProdutoResponseDto } from '../dto/produto.response.dto';
 import { ProdutoRequestDto } from '../dto/produto.request.dto';
 
-@Controller('produtos')
+@Controller('/produtos')
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
 
@@ -29,10 +29,10 @@ export class ProdutoController {
     return this.produtoService.findById(id);
   }
 
-  @Get(':name')
+  @Get('nome/:nome')
   @HttpCode(HttpStatus.OK)
   findProductByName(
-    @Param('name') nome: string,
+    @Param('nome') nome: string,
   ): Promise<ProdutoResponseDto[]> {
     return this.produtoService.findProductByName(nome);
   }
